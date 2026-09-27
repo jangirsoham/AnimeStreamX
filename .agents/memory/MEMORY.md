@@ -1,0 +1,1 @@
+- [External npm deployment installs](npm-lockfile-registry.md) — package-lock resolved URLs must use the public npm registry, not Replit’s internal firewall host.
