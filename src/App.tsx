@@ -28,9 +28,9 @@ type Title = {
 };
 
 const images = {
-  jjk0: 'https://images.pexels.com/photos/2113566/pexels-photo-2113566.jpeg?auto=compress&cs=tinysrgb&w=1100',
-  castle: 'https://images.pexels.com/photos/2387873/pexels-photo-2387873.jpeg?auto=compress&cs=tinysrgb&w=1100',
-  city: 'https://images.pexels.com/photos/325185/pexels-photo-325185.jpeg?auto=compress&cs=tinysrgb&w=1100',
+  jjk0: '/posters/jujutsu-kaisen-0.jpg',
+  castle: '/posters/infinity-castle.jpg',
+  city: '/posters/jujutsu-kaisen-season-1.webp',
 };
 
 const titles: Title[] = [
