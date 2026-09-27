@@ -11,6 +11,13 @@ type Episode = {
   description: string;
   duration: string;
   source: string;
+  seasonId?: string;
+};
+
+type Season = {
+  id: string;
+  label: string;
+  episodes: Episode[];
 };
 
 type Title = {
@@ -25,6 +32,7 @@ type Title = {
   image: string;
   featured?: boolean;
   episodes?: Episode[];
+  seasons?: Season[];
 };
 
 const images = {
@@ -32,6 +40,32 @@ const images = {
   castle: '/posters/infinity-castle.jpg',
   city: '/posters/jujutsu-kaisen-season-1.webp',
 };
+
+type EpisodeTemplate = Partial<Pick<Episode, 'id' | 'title' | 'description' | 'duration' | 'source'>>;
+
+function makeSeason(id: string, label: string, episodeCount: number, knownEpisodes: Record<number, EpisodeTemplate> = {}): Season {
+  return {
+    id,
+    label,
+    episodes: Array.from({ length: episodeCount }, (_, index) => {
+      const number = index + 1;
+      const known = knownEpisodes[number] ?? {};
+      return {
+        id: known.id ?? `${id}-episode-${number}`,
+        number,
+        title: known.title ?? `Episode ${String(number).padStart(2, '0')}`,
+        description: known.description ?? 'Embed link pending.',
+        duration: known.duration ?? '23m',
+        source: known.source ?? '',
+        seasonId: id,
+      };
+    }),
+  };
+}
+
+function getEpisodes(title: Title) {
+  return title.seasons?.flatMap((season) => season.episodes) ?? title.episodes ?? [];
+}
 
 const titles: Title[] = [
   {
@@ -60,18 +94,40 @@ const titles: Title[] = [
     episodes: [{ id: 'movie', number: 1, title: 'Infinity Castle', description: 'Feature film', duration: '2h 16m', source: 'https://player.abyssplayer.com/r9txDiZ44' }],
   },
   {
-    id: 'jujutsu-kaisen-season-1',
+    id: 'jujutsu-kaisen',
     title: 'Jujutsu Kaisen',
     type: 'Anime',
     year: '2020',
     rating: '8.7',
     genre: 'Action',
-    runtime: 'Season 1',
+    runtime: '3 seasons',
     description: 'Yuji Itadori joins Tokyo Jujutsu High after swallowing a cursed finger and becoming the vessel of Ryomen Sukuna.',
     image: images.city,
-    episodes: [
-      { id: 'episode-1', number: 1, title: 'Ryomen Sukuna', description: 'Yuji discovers a cursed finger and makes a dangerous choice.', duration: '23m', source: 'https://player.abyssplayer.com/pkhwA062-' },
-      { id: 'episode-2', number: 2, title: 'For Myself', description: 'Yuji wakes up at Tokyo Jujutsu High and learns the cost of his decision.', duration: '23m', source: 'https://player.abyssplayer.com/B3loa0wwQ' },
+    seasons: [
+      makeSeason('jujutsu-kaisen-season-1', 'Season 1', 24, {
+        1: { id: 'episode-1', title: 'Ryomen Sukuna', description: 'Yuji discovers a cursed finger and makes a dangerous choice.', duration: '23m', source: 'https://player.abyssplayer.com/pkhwA062-' },
+        2: { id: 'episode-2', title: 'For Myself', description: 'Yuji wakes up at Tokyo Jujutsu High and learns the cost of his decision.', duration: '23m', source: 'https://player.abyssplayer.com/B3loa0wwQ' },
+      }),
+      makeSeason('jujutsu-kaisen-season-2', 'Season 2 · Hidden Inventory / Shibuya Incident', 23),
+      makeSeason('jujutsu-kaisen-season-3', 'Season 3 · The Culling Game: Part 1', 12),
+    ],
+  },
+  {
+    id: 'demon-slayer',
+    title: 'Demon Slayer',
+    type: 'Anime',
+    year: '2019',
+    rating: '8.6',
+    genre: 'Action',
+    runtime: '63 episodes',
+    description: 'Tanjiro Kamado joins the Demon Slayer Corps after a demon attack changes his family forever.',
+    image: images.castle,
+    seasons: [
+      makeSeason('demon-slayer-season-1', 'Season 1 · Unwavering Resolve', 26),
+      makeSeason('demon-slayer-mugen-train', 'Season 2 · Mugen Train', 7),
+      makeSeason('demon-slayer-entertainment-district', 'Season 2 · Entertainment District', 11),
+      makeSeason('demon-slayer-swordsmith-village', 'Season 3 · Swordsmith Village', 11),
+      makeSeason('demon-slayer-hashira-training', 'Season 4 · Hashira Training', 8),
     ],
   },
 ];
@@ -118,7 +174,9 @@ function App() {
     setSaved((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
   };
 
-  const activeTitle = titles.find((title) => title.id === location.id) ?? featured;
+  const activeTitle = titles.find((title) => title.id === location.id)
+    ?? (location.id === 'jujutsu-kaisen-season-1' ? titles.find((title) => title.id === 'jujutsu-kaisen') : undefined)
+    ?? featured;
 
   return (
     <div className="app-shell">
@@ -227,7 +285,7 @@ function ContinueWatching({ navigate }: { navigate: (path: string) => void }) {
         <p>Episode 2 of Season 1</p>
         <div className="progress-track" aria-label="60 percent watched"><span /></div>
         <div className="continue-meta"><span>14m watched</span><span>23m total</span></div>
-        <button className="button button-primary compact-button" onClick={() => navigate(pathFor('watch', 'jujutsu-kaisen-season-1', 'episode-2'))}><Play size={15} fill="currentColor" /> Continue</button>
+        <button className="button button-primary compact-button" onClick={() => navigate(pathFor('watch', 'jujutsu-kaisen', 'episode-2'))}><Play size={15} fill="currentColor" /> Continue</button>
       </div>
     </article>
   );
@@ -287,8 +345,16 @@ function TitleCard({ title, navigate, saved, toggleSaved, featuredCard = false }
 }
 
 function Detail({ title, navigate, saved, toggleSaved }: { title: Title; navigate: (path: string) => void; saved: string[]; toggleSaved: (id: string) => void }) {
-  const playableEpisode = title.episodes?.[0];
+  const [selectedSeasonId, setSelectedSeasonId] = useState(title.seasons?.[0]?.id);
+  const activeSeason = title.seasons?.find((season) => season.id === selectedSeasonId) ?? title.seasons?.[0];
+  const episodes = activeSeason?.episodes ?? title.episodes ?? [];
+  const playableEpisode = episodes.find((episode) => episode.source);
   const isSaved = saved.includes(title.id);
+
+  useEffect(() => {
+    setSelectedSeasonId(title.seasons?.[0]?.id);
+  }, [title.id, title.seasons]);
+
   return (
     <main className="page detail-page">
       <section className="detail-hero">
@@ -299,21 +365,29 @@ function Detail({ title, navigate, saved, toggleSaved }: { title: Title; navigat
           <h1>{title.title}</h1>
           <p className="detail-description">{title.description}</p>
           <div className="detail-stats"><span>{title.year}</span><span><Star size={12} fill="currentColor" /> {title.rating}</span><span>{title.runtime}</span></div>
-          <div className="button-row"><button className="button button-primary" onClick={() => playableEpisode && navigate(pathFor('watch', title.id, playableEpisode.id))}><Play size={16} fill="currentColor" /> {title.type === 'Movie' ? 'Play movie' : 'Play episode 1'}</button><button className="button button-secondary" onClick={() => toggleSaved(title.id)}><Bookmark size={15} fill={isSaved ? 'currentColor' : 'none'} /> {isSaved ? 'Saved' : 'Save title'}</button></div>
+          <div className="button-row"><button className="button button-primary" disabled={!playableEpisode} onClick={() => playableEpisode && navigate(pathFor('watch', title.id, playableEpisode.id))}><Play size={16} fill="currentColor" /> {title.type === 'Movie' ? 'Play movie' : playableEpisode ? 'Play episode 1' : 'Awaiting links'}</button><button className="button button-secondary" onClick={() => toggleSaved(title.id)}><Bookmark size={15} fill={isSaved ? 'currentColor' : 'none'} /> {isSaved ? 'Saved' : 'Save title'}</button></div>
         </div>
       </section>
-      {title.episodes && <section className="episodes-section"><SectionHeading title={title.type === 'Movie' ? 'Movie' : 'Episodes'} /><div className="episode-list">{title.episodes.map((episode) => <button className="episode-item" key={episode.id} onClick={() => navigate(pathFor('watch', title.id, episode.id))}><span className="episode-number">{title.type === 'Movie' ? <Play size={14} fill="currentColor" /> : String(episode.number).padStart(2, '0')}</span><span className="episode-copy"><h3>{episode.title}</h3><p>{episode.description}</p></span><span className="episode-duration"><Clock3 size={14} /> {episode.duration} <ChevronRight size={15} /></span></button>)}</div></section>}
+      {episodes.length > 0 && <section className="episodes-section">
+        <SectionHeading title={title.type === 'Movie' ? 'Movie' : 'Episodes'} />
+        {title.seasons && <div className="season-tabs" role="tablist" aria-label={`${title.title} seasons`}>{title.seasons.map((season) => <button key={season.id} className={`season-tab ${activeSeason?.id === season.id ? 'active' : ''}`} onClick={() => setSelectedSeasonId(season.id)} role="tab" aria-selected={activeSeason?.id === season.id}>{season.label}</button>)}</div>}
+        <div className="episode-list">{episodes.map((episode) => <button className={`episode-item ${episode.source ? '' : 'episode-item-pending'}`} key={episode.id} disabled={!episode.source} onClick={() => episode.source && navigate(pathFor('watch', title.id, episode.id))}><span className="episode-number">{title.type === 'Movie' ? <Play size={14} fill="currentColor" /> : String(episode.number).padStart(2, '0')}</span><span className="episode-copy"><h3>{episode.title}</h3><p>{episode.description}</p>{!episode.source && <span className="episode-status">Embed link pending</span>}</span><span className="episode-duration">{episode.source ? <><Clock3 size={14} /> {episode.duration} <ChevronRight size={15} /></> : 'Pending'}</span></button>)}</div>
+      </section>}
     </main>
   );
 }
 
 function Watch({ title, episodeId, navigate }: { title: Title; episodeId?: string; navigate: (path: string) => void }) {
-  const episode = title.episodes?.find((item) => item.id === episodeId) ?? title.episodes?.[0];
-  const nextEpisode = title.episodes?.find((item) => item.number === (episode?.number ?? 0) + 1);
+  const episodes = getEpisodes(title);
+  const episode = episodes.find((item) => item.id === episodeId) ?? episodes[0];
+  const nextEpisode = episode?.seasonId
+    ? episodes.find((item) => item.seasonId === episode.seasonId && item.number === episode.number + 1)
+    : episodes.find((item) => item.number === (episode?.number ?? 0) + 1);
+  const seasonLabel = title.seasons?.find((season) => season.id === episode?.seasonId)?.label;
   return (
     <main className="page watch-page">
-      <div className="watch-header"><div><button className="back-button" onClick={() => navigate(pathFor('detail', title.id))}><ArrowLeft size={15} /> Back to title</button><h1>{title.title}{title.type === 'Anime' && episode ? ` · ${episode.number}. ${episode.title}` : ''}</h1><p className="watch-subtitle">{title.type === 'Movie' ? 'Movie' : `Season 1 · Episode ${String(episode?.number ?? 1)}`}</p></div><button className="button button-secondary" onClick={() => navigate('/catalog')}>Browse catalog</button></div>
-      <div className="player-shell">{episode ? <iframe src={episode.source} title={`${title.title} player`} allow="autoplay; fullscreen; picture-in-picture" allowFullScreen /> : <div className="empty-state"><h3>Playback unavailable</h3><p>This title does not have a playable episode yet.</p></div>}</div>
+      <div className="watch-header"><div><button className="back-button" onClick={() => navigate(pathFor('detail', title.id))}><ArrowLeft size={15} /> Back to title</button><h1>{title.title}{title.type === 'Anime' && episode ? ` · ${episode.number}. ${episode.title}` : ''}</h1><p className="watch-subtitle">{title.type === 'Movie' ? 'Movie' : `${seasonLabel ?? 'Season'} · Episode ${String(episode?.number ?? 1)}`}</p></div><button className="button button-secondary" onClick={() => navigate('/catalog')}>Browse catalog</button></div>
+      <div className="player-shell">{episode?.source ? <iframe src={episode.source} title={`${title.title} player`} allow="autoplay; fullscreen; picture-in-picture" allowFullScreen /> : <div className="empty-state"><h3>Embed link pending</h3><p>Share this episode’s player URL to enable playback.</p></div>}</div>
       <div className="player-note"><span><Check size={14} /> Playback source ready</span><span>{episode?.duration}</span></div>
       {nextEpisode && <section className="next-up"><SectionHeading title="Next episode" /><button className="next-card" onClick={() => navigate(pathFor('watch', title.id, nextEpisode.id))}><img src={title.image} alt="" /><div><span>Episode {String(nextEpisode.number).padStart(2, '0')}</span><h3>{nextEpisode.title}</h3></div><ChevronRight size={17} /></button></section>}
     </main>

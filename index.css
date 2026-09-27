@@ -191,6 +191,7 @@ button:focus-visible, input:focus-visible { outline: 2px solid hsl(var(--accent)
 }
 
 .button:hover { transform: translateY(-1px); }
+.button:disabled { cursor: not-allowed; opacity: .52; transform: none; }
 .button-primary { color: hsl(var(--accent-dark)); background: hsl(var(--accent)); }
 .button-primary:hover { background: hsl(39 95% 72%); }
 .button-secondary { color: hsl(var(--text)); border-color: hsl(var(--text) / .24); background: hsl(var(--surface) / .9); }
@@ -275,12 +276,18 @@ button:focus-visible, input:focus-visible { outline: 2px solid hsl(var(--accent)
 .detail-stats span:nth-child(2) { color: hsl(var(--accent)); }
 .episodes-section { padding: clamp(42px, 6vw, 78px) clamp(20px, 8vw, 120px); }
 .episodes-section .section-heading { max-width: 1000px; }
+.season-tabs { display: flex; gap: 8px; max-width: 1000px; margin: 0 0 18px; overflow-x: auto; padding-bottom: 4px; }
+.season-tab { flex: 0 0 auto; padding: 9px 12px; cursor: pointer; color: hsl(var(--muted)); border: 1px solid hsl(var(--line)); border-radius: 3px; background: hsl(var(--surface)); font-size: 12px; text-align: left; transition: color .2s ease, border-color .2s ease, background .2s ease; }
+.season-tab:hover, .season-tab.active { color: hsl(var(--accent-dark)); border-color: hsl(var(--accent)); background: hsl(var(--accent)); }
 .episode-list { max-width: 1000px; border-top: 1px solid hsl(var(--line)); }
 .episode-item { display: grid; grid-template-columns: 48px minmax(0, 1fr) auto; align-items: center; gap: 16px; width: 100%; padding: 18px 0; cursor: pointer; border-bottom: 1px solid hsl(var(--line)); color: inherit; background: transparent; text-align: left; transition: padding .2s ease, background .2s ease; }
 .episode-item:hover { padding-right: 14px; padding-left: 14px; background: hsl(var(--surface)); }
+.episode-item:disabled { cursor: not-allowed; opacity: .62; }
+.episode-item-pending:hover { padding-right: 0; padding-left: 0; background: transparent; }
 .episode-number { display: grid; place-items: center; width: 32px; height: 32px; color: hsl(var(--accent)); border: 1px solid hsl(var(--accent) / .35); border-radius: 50%; font-family: var(--font-mono); font-size: 11px; }
 .episode-copy h3 { margin: 0 0 5px; color: hsl(var(--text)); font-size: 15px; }
 .episode-copy p { margin: 0; color: hsl(var(--muted)); font-size: 13px; }
+.episode-status { display: block; margin-top: 6px; color: hsl(var(--accent)); font-family: var(--font-mono); font-size: 10px; letter-spacing: .04em; text-transform: uppercase; }
 .episode-duration { display: inline-flex; align-items: center; gap: 8px; color: hsl(var(--muted)); font-family: var(--font-mono); font-size: 10px; }
 
 .watch-page { min-height: calc(100dvh - 68px); padding: clamp(32px, 5vw, 60px) clamp(20px, 6vw, 90px) 80px; background: hsl(var(--bg)); }
