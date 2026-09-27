@@ -39,6 +39,7 @@ const images = {
   jjk0: '/posters/jujutsu-kaisen-0.jpg',
   castle: '/posters/infinity-castle.jpg',
   city: '/posters/jujutsu-kaisen-season-1.webp',
+  demon: '/posters/demon-slayer.jpg',
 };
 
 type EpisodeTemplate = Partial<Pick<Episode, 'id' | 'title' | 'description' | 'duration' | 'source'>>;
@@ -121,7 +122,7 @@ const titles: Title[] = [
     genre: 'Action',
     runtime: '63 episodes',
     description: 'Tanjiro Kamado joins the Demon Slayer Corps after a demon attack changes his family forever.',
-    image: images.castle,
+    image: images.demon,
     seasons: [
       makeSeason('demon-slayer-season-1', 'Season 1 · Unwavering Resolve', 26),
       makeSeason('demon-slayer-mugen-train', 'Season 2 · Mugen Train', 7),
