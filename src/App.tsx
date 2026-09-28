@@ -56,7 +56,7 @@ function makeSeason(id: string, label: string, episodeCount: number, knownEpisod
         id: known.id ?? `${id}-episode-${number}`,
         number,
         title: known.title ?? `Episode ${String(number).padStart(2, '0')}`,
-        description: known.description ?? 'Embed link pending.',
+        description: known.description ?? (known.source ? 'Episode link ready.' : 'Embed link pending.'),
         duration: known.duration ?? '23m',
         source: known.source ?? '',
         seasonId: id,
