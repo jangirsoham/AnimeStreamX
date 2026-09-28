@@ -40,6 +40,7 @@ const images = {
   castle: '/posters/infinity-castle.jpg',
   city: '/posters/jujutsu-kaisen-season-1.webp',
   demon: '/posters/demon-slayer.jpg',
+  reze: '/posters/chainsaw-man-reze-arc.svg',
 };
 
 type EpisodeTemplate = Partial<Pick<Episode, 'id' | 'title' | 'description' | 'duration' | 'source'>>;
@@ -93,6 +94,18 @@ const titles: Title[] = [
     description: 'The Demon Slayer Corps enters Muzan Kibutsuji’s shifting fortress for a final battle where every room changes the fight.',
     image: images.castle,
     episodes: [{ id: 'movie', number: 1, title: 'Infinity Castle', description: 'Feature film', duration: '2h 16m', source: 'https://player.abyssplayer.com/r9txDiZ44' }],
+  },
+  {
+    id: 'chainsaw-man-reze-arc',
+    title: 'Chainsaw Man – The Movie: Reze Arc',
+    type: 'Movie',
+    year: '2025',
+    rating: '—',
+    genre: 'Action',
+    runtime: 'Feature film',
+    description: 'Denji meets Reze, a mysterious girl who draws him into a new chapter of love, danger, and devil hunting.',
+    image: images.reze,
+    episodes: [{ id: 'movie', number: 1, title: 'Chainsaw Man – The Movie: Reze Arc', description: 'Feature film', duration: 'Feature film', source: '' }],
   },
   {
     id: 'jujutsu-kaisen',
