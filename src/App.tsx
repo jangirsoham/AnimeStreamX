@@ -121,6 +121,15 @@ const titles: Title[] = [
       makeSeason('jujutsu-kaisen-season-1', 'Season 1', 24, {
         1: { id: 'episode-1', title: 'Ryomen Sukuna', description: 'Yuji discovers a cursed finger and makes a dangerous choice.', duration: '23m', source: 'https://player.abyssplayer.com/pkhwA062-' },
         2: { id: 'episode-2', title: 'For Myself', description: 'Yuji wakes up at Tokyo Jujutsu High and learns the cost of his decision.', duration: '23m', source: 'https://player.abyssplayer.com/B3loa0wwQ' },
+        3: { source: 'https://player.abyssplayer.com/XeU3dvpTeB' },
+        4: { source: 'https://player.abyssplayer.com/blDJKatuK' },
+        5: { source: 'https://player.abyssplayer.com/qLCI2MTS3' },
+        6: { source: 'https://player.abyssplayer.com/7_Qz2EzXz' },
+        7: { source: 'https://player.abyssplayer.com/iQfWPlkCR' },
+        8: { source: 'https://player.abyssplayer.com/CXA3O4djv' },
+        9: { source: 'https://player.abyssplayer.com/ILjOOaBul' },
+        10: { source: 'https://player.abyssplayer.com/o_ECjtpnr' },
+        11: { source: 'https://player.abyssplayer.com/gV9ll-PII' },
       }),
       makeSeason('jujutsu-kaisen-season-2', 'Season 2 · Hidden Inventory / Shibuya Incident', 23),
       makeSeason('jujutsu-kaisen-season-3', 'Season 3 · The Culling Game: Part 1', 12),
@@ -137,7 +146,10 @@ const titles: Title[] = [
     description: 'Tanjiro Kamado joins the Demon Slayer Corps after a demon attack changes his family forever.',
     image: images.demon,
     seasons: [
-      makeSeason('demon-slayer-season-1', 'Season 1 · Unwavering Resolve', 26),
+      makeSeason('demon-slayer-season-1', 'Season 1 · Unwavering Resolve', 26, {
+        1: { source: 'https://player.abyssplayer.com/3cmyHcu1J' },
+        2: { source: 'https://player.abyssplayer.com/iiQMbtOz0' },
+      }),
       makeSeason('demon-slayer-mugen-train', 'Season 2 · Mugen Train', 7),
       makeSeason('demon-slayer-entertainment-district', 'Season 2 · Entertainment District', 11),
       makeSeason('demon-slayer-swordsmith-village', 'Season 3 · Swordsmith Village', 11),
