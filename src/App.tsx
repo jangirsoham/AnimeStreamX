@@ -40,7 +40,7 @@ const images = {
   castle: '/posters/infinity-castle.jpg',
   city: '/posters/jujutsu-kaisen-season-1.webp',
   demon: '/posters/demon-slayer.jpg',
-  reze: '/posters/chainsaw-man-reze-arc.svg',
+  reze: '/posters/chainsaw-man-reze-arc.jpeg',
 };
 
 type EpisodeTemplate = Partial<Pick<Episode, 'id' | 'title' | 'description' | 'duration' | 'source'>>;
@@ -105,7 +105,7 @@ const titles: Title[] = [
     runtime: 'Feature film',
     description: 'Denji meets Reze, a mysterious girl who draws him into a new chapter of love, danger, and devil hunting.',
     image: images.reze,
-    episodes: [{ id: 'movie', number: 1, title: 'Chainsaw Man – The Movie: Reze Arc', description: 'Feature film', duration: 'Feature film', source: '' }],
+    episodes: [{ id: 'movie', number: 1, title: 'Chainsaw Man – The Movie: Reze Arc', description: 'Feature film', duration: 'Feature film', source: 'https://iframe.mediadelivery.net/embed/757034/c7880a94-214f-437d-9ca2-c717943bddf8?autoplay=true&loop=false&muted=true&preload=true&responsive=true' }],
   },
   {
     id: 'jujutsu-kaisen',
@@ -401,7 +401,7 @@ function Watch({ title, episodeId, navigate }: { title: Title; episodeId?: strin
   return (
     <main className="page watch-page">
       <div className="watch-header"><div><button className="back-button" onClick={() => navigate(pathFor('detail', title.id))}><ArrowLeft size={15} /> Back to title</button><h1>{title.title}{title.type === 'Anime' && episode ? ` · ${episode.number}. ${episode.title}` : ''}</h1><p className="watch-subtitle">{title.type === 'Movie' ? 'Movie' : `${seasonLabel ?? 'Season'} · Episode ${String(episode?.number ?? 1)}`}</p></div><button className="button button-secondary" onClick={() => navigate('/catalog')}>Browse catalog</button></div>
-      <div className="player-shell">{episode?.source ? <iframe src={episode.source} title={`${title.title} player`} allow="autoplay; fullscreen; picture-in-picture" allowFullScreen /> : <div className="empty-state"><h3>Embed link pending</h3><p>Share this episode’s player URL to enable playback.</p></div>}</div>
+       <div className="player-shell">{episode?.source ? <iframe src={episode.source} title={`${title.title} player`} allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture; fullscreen" allowFullScreen /> : <div className="empty-state"><h3>Embed link pending</h3><p>Share this episode’s player URL to enable playback.</p></div>}</div>
       <div className="player-note"><span><Check size={14} /> Playback source ready</span><span>{episode?.duration}</span></div>
       {nextEpisode && <section className="next-up"><SectionHeading title="Next episode" /><button className="next-card" onClick={() => navigate(pathFor('watch', title.id, nextEpisode.id))}><img src={title.image} alt="" /><div><span>Episode {String(nextEpisode.number).padStart(2, '0')}</span><h3>{nextEpisode.title}</h3></div><ChevronRight size={17} /></button></section>}
     </main>
