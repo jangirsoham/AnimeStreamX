@@ -8,9 +8,10 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && node scripts/verify-build.mjs",
+    "build": "tsc -b && npm run verify:function && vite build && tsx scripts/verify-build.mjs",
     "preview": "vite preview",
     "typecheck": "tsc -b",
+    "verify:function": "node scripts/verify-function.mjs",
     "test": "tsx --test tests/*.test.ts",
     "check": "npm run typecheck && npm test"
   },

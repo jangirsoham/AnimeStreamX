@@ -1,3 +1,3 @@
-import { createPlaybackHandler } from "../server/playback.ts";
+import { createPlaybackHandler } from "../server/playback.js";
 
 export default createPlaybackHandler();

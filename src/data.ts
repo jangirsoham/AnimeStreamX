@@ -1,4 +1,4 @@
-import { episodeMetadataBySeason } from "./metadata/index.ts";
+import { episodeMetadataBySeason } from "./metadata/index.js";
 
 export type MediaType = "Movie" | "Anime";
 

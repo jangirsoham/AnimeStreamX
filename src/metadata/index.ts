@@ -1,7 +1,7 @@
-import { jujutsuKaisenMetadata } from "./jujutsu-kaisen.ts";
-import { demonSlayerMetadata } from "./demon-slayer.ts";
-import { chainsawManMetadata } from "./chainsaw-man.ts";
-import { soloLevelingMetadata } from "./solo-leveling.ts";
+import { jujutsuKaisenMetadata } from "./jujutsu-kaisen.js";
+import { demonSlayerMetadata } from "./demon-slayer.js";
+import { chainsawManMetadata } from "./chainsaw-man.js";
+import { soloLevelingMetadata } from "./solo-leveling.js";
 
 export type EpisodeMetadata = { title: string; description: string };
 

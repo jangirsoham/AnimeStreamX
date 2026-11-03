@@ -29,11 +29,13 @@ For a fresh checkout, copy `.env.example` to `.env.local`, then configure `PLAYB
 
 ```sh
 npm run check     # TypeScript, routing, catalog and Node HTTP API tests
-npm run build     # Production build, complete source mapping and artifact validation
+npm run build     # Compiled API smoke test, production build and artifact validation
 npm run preview   # Local production preview with the playback API
 ```
 
 `dist/` is generated output and is excluded from version control. Edit `src/` and `index.css`, then rebuild. The build checks unique catalog IDs, referenced artwork, exact playback coverage, approved provider URLs, and absence of direct player URLs, private environment files and source maps in public output. Private URL values are never included in validation errors.
+
+The build also runs `npm run verify:function`: it compiles the API with the root TypeScript configuration and starts the emitted JavaScript in plain Node.js, checking every playable selection with dummy sources. Vercel compiles API functions separately from Vite and does not use TypeScript project references. Runtime imports in the API's dependency chain therefore use `.js` extensions, which TypeScript resolves to the matching source files during development.
 
 ## Deploy on Vercel
 
@@ -87,6 +89,7 @@ Watchlists and recently opened episodes stay in this browser. Playback progress,
 - `tests/episode-metadata.test.ts`: checks synopsis quality and source coverage for every catalog entry, including pending episodes.
 - `docs/EPISODE-SOURCES.md`, `docs/episode-sources.json`: episode and movie research provenance.
 - `scripts/catalog-validation.ts`, `scripts/verify-build.mjs`: production catalog, playback coverage and public artifact checks.
+- `scripts/verify-function.mjs`: emitted JavaScript startup and HTTP checks for the Vercel API, without a TypeScript loader.
 - `public/artwork/`: optimized images used by the site.
 - `index.css`: responsive styling and reduced-motion rules.
 

@@ -23,6 +23,8 @@ npm run preview
 
 Open `http://127.0.0.1:5000`. Production builds reject missing artwork, duplicate IDs, incomplete/extra source mappings and unapproved player URLs. They also check for accidental exposure of source URLs or environment files in public assets. Automated API tests use dummy source values.
 
+The build includes a separate compiled API check (`npm run verify:function`). It uses the root TypeScript settings, starts the emitted JavaScript in plain Node.js, and verifies all 103 playable selections with dummy sources. This catches function import and startup errors before deployment.
+
 ## Included changes
 
 - 48 additional Jujutsu Kaisen episodes: S1 E12–24, S2 E1–23 and S3 E1–12.

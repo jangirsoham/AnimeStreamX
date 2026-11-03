@@ -1,5 +1,5 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { getEpisodes, isPlayable, titles } from "../src/data.ts";
+import { getEpisodes, isPlayable, titles } from "../src/data.js";
 
 type PlaybackEnvironment = {
   PLAYBACK_SOURCES_JSON?: string;
